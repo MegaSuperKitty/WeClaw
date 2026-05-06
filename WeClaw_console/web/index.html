@@ -1,0 +1,829 @@
+﻿<!doctype html>
+<html lang="zh-CN" data-theme="light" style="height: 100%;">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeClaw Console</title>
+    <link rel="icon" type="image/png" href="/assets/icons/app-icon.png" />
+    <link rel="apple-touch-icon" href="/assets/icons/app-icon.png" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+    />
+    <link rel="stylesheet" href="/assets/styles.css?v=20260415v1" />
+  </head>
+  <body>
+    <!-- Dynamic gradient background -->
+    <div class="gradient-bg"></div>
+
+    <div class="shell" id="shellGrid">
+      <!-- Top navigation bar -->
+      <header class="topbar liquid-glass">
+        <div class="topbar-left">
+          <div class="brand">
+            <div class="brand-logo pulse-glow">
+              <img src="/assets/icons/app-icon.png" alt="WeClaw logo" />
+            </div>
+            <div class="brand-text">
+              <span class="brand-title font-display">WeClaw</span>
+              <span class="brand-sub" id="pageTitle">WeClaw Console</span>
+            </div>
+          </div>
+        </div>
+        <div class="topbar-status">
+          <span class="status-dot online"></span>
+          <span class="status-text" id="serviceHealth" data-i18n="service_online">Service: online</span>
+          <button class="btn-glass btn-sm" id="langToggleBtn">EN</button>
+        </div>
+      </header>
+
+      <!-- Left sidebar navigation -->
+      <nav class="nav liquid-glass">
+        <div class="nav-group">
+          <button class="nav-label nav-label--static" data-i18n="nav_group_main">Main</button>
+          <div class="nav-group__items">
+            <button class="nav-item active" data-view="chat">
+              <span class="nav-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </span>
+              <span class="nav-item__text" data-i18n="nav_chat">Chat</span>
+            </button>
+            <button class="nav-item" data-view="search">
+              <span class="nav-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              </span>
+              <span class="nav-item__text" data-i18n="nav_search">Search</span>
+            </button>
+            <button class="nav-item" data-view="channels">
+              <span class="nav-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </span>
+              <span class="nav-item__text" data-i18n="nav_channels">Channels</span>
+            </button>
+            <button class="nav-item" data-view="browser">
+              <span class="nav-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z"/></svg>
+              </span>
+              <span class="nav-item__text" data-i18n="nav_browser">Browser</span>
+            </button>
+          </div>
+        </div>
+        <div class="nav-group">
+          <button class="nav-label nav-label--static" data-i18n="nav_group_system">System</button>
+          <div class="nav-group__items">
+            <button class="nav-item" data-view="alarms">
+              <span class="nav-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+              </span>
+              <span class="nav-item__text" data-i18n="nav_alarms">瀹氭椂浠诲姟</span>
+            </button>
+            <button class="nav-item" data-view="skills">
+              <span class="nav-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </span>
+              <span class="nav-item__text" data-i18n="nav_skills">Skills</span>
+            </button>
+            <button class="nav-item" data-view="mcp">
+              <span class="nav-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h3M4 17v3h3M20 7V4h-3M20 17v3h-3M9 9h6v6H9z"/></svg>
+              </span>
+              <span class="nav-item__text" data-i18n="nav_mcp">MCP</span>
+            </button>
+            <button class="nav-item" data-view="models">
+              <span class="nav-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </span>
+              <span class="nav-item__text" data-i18n="nav_models">Models</span>
+            </button>
+            <button class="nav-item" data-view="billing">
+              <span class="nav-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+              </span>
+              <span class="nav-item__text" data-i18n="nav_billing">Billing</span>
+            </button>
+          </div>
+        </div>
+        <div class="nav-group">
+          <button class="nav-label nav-label--static" data-i18n="nav_group_resources">Resources</button>
+          <div class="nav-group__items">
+            <button class="nav-item" data-view="workspace">
+              <span class="nav-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18"/><path d="M6 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M8 11h8"/><path d="M8 15h6"/></svg>
+              </span>
+              <span class="nav-item__text" data-i18n="nav_workspace">Workspace</span>
+            </button>
+          </div>
+        </div>
+        <div class="nav-group nav-group--bottom">
+          <button class="nav-label nav-label--static" data-i18n="nav_group_settings">Settings</button>
+          <div class="nav-group__items">
+            <button class="nav-item" id="settingsBtn">
+              <span class="nav-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m4.22-10.22l4.24-4.24M6.34 6.34L2.1 2.1m17.8 17.8l-4.24-4.24M6.34 17.66l-4.24 4.24M23 12h-6m-6 0H1m20.07-4.93l-4.24 4.24M6.34 6.34l-4.24-4.24m17.8 17.8l-4.24-4.24M6.34 17.66l-4.24 4.24"/></svg>
+              </span>
+              <span class="nav-item__text" data-i18n="nav_settings">Settings</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main content area -->
+      <main class="content">
+        <!-- Chat View with 3-column layout -->
+        <section id="view-chat" class="view active">
+          <div class="chat-layout">
+            <!-- Sessions sidebar -->
+            <aside class="session-sidebar liquid-glass glass-glow">
+              <div class="session-header">
+                <h3 class="session-title font-display" data-i18n="sessions_title">Sessions</h3>
+                <div class="session-actions">
+                  <button id="refreshSessionsBtn" class="btn-secondary btn-sm btn-glass" data-i18n="btn_refresh">Refresh</button>
+                  <button id="newSessionBtn" class="btn-primary btn-sm" data-i18n="new_web_session">New Session</button>
+                </div>
+              </div>
+              <div class="session-filters" id="sessionFilters">
+                <button class="filter-btn active" data-filter="all" data-i18n="filter_all">All</button>
+                <button class="filter-btn" data-filter="qq" data-i18n="filter_qq">QQ</button>
+                <button class="filter-btn" data-filter="cli" data-i18n="filter_cli">CLI</button>
+                <button class="filter-btn" data-filter="web" data-i18n="filter_web">Web</button>
+              </div>
+              <div id="sessionList" class="session-list"></div>
+            </aside>
+
+            <!-- Chat area -->
+            <div class="chat-area liquid-glass">
+              <div id="chatMessages" class="chat-messages"></div>
+              <div class="chat-input-area">
+                <textarea
+                  id="chatInput"
+                  class="chat-input liquid-glass"
+                  rows="4"
+                  data-i18n-placeholder="input_message_placeholder"
+                  placeholder="Type your message..."
+                ></textarea>
+                <div class="chat-controls">
+                  <button id="cancelBtn" class="btn-secondary btn-glass btn-sm" data-i18n="btn_cancel" title="Cancel">Cancel</button>
+                  <label class="upload-label btn-glass btn-sm">
+                    <input type="file" id="fileInput" />
+                    <span data-i18n="btn_upload">Upload</span>
+                  </label>
+                  <button id="voiceInputBtn" class="btn-glass btn-sm" type="button" data-i18n="btn_voice_start">Voice</button>
+                  <span id="voiceInputStatus" class="voice-status" data-i18n="voice_idle">Idle</span>
+                  <button id="sendBtn" class="btn-primary" data-i18n="btn_send">Send</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Task board sidebar -->
+            <aside class="trace-sidebar task-board-sidebar liquid-glass">
+              <div class="task-board-header">
+                <div class="task-board-title-wrap">
+                  <h3 class="trace-title font-display" data-i18n="task_board_title">Task</h3>
+                  <div id="taskBoardCount" class="task-board-count">活跃 0 / 总计 0</div>
+                </div>
+              </div>
+              <div id="taskBoardEmpty" class="task-board-empty" data-i18n="task_board_empty">当前主会话下还没有任务。</div>
+              <div id="taskBoardList" class="task-board-list"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="view-search" class="view">
+          <div class="page-grid">
+            <div class="chat-area liquid-glass page-panel">
+              <div class="search-input-row">
+                <input id="searchInput" class="liquid-glass" data-i18n-placeholder="search_placeholder" placeholder="Search..." />
+                <button id="runSearchBtn" class="btn-primary" data-i18n="btn_search">Search</button>
+              </div>
+              <div class="search-filter-row">
+                <select id="searchChannelFilter" class="liquid-glass">
+                  <option value="" data-i18n="filter_all_channels">All Channels</option>
+                  <option value="web">WEB</option>
+                  <option value="cli">CLI</option>
+                  <option value="qq">QQ</option>
+                  <option value="discord">Discord</option>
+                </select>
+                <input
+                  id="searchLimitInput"
+                  type="number"
+                  min="1"
+                  max="100"
+                  value="20"
+                  class="liquid-glass"
+                  data-i18n-placeholder="search_limit_placeholder"
+                  placeholder="limit"
+                />
+                <button id="refreshSearchStatusBtn" class="btn-secondary btn-glass" data-i18n="btn_reload">Refresh</button>
+                <button id="reindexSearchBtn" class="btn-secondary btn-glass" data-i18n="btn_reindex">Reindex</button>
+              </div>
+              <div id="searchStatusBox" class="state-box"></div>
+            </div>
+            <div class="chat-area liquid-glass page-panel">
+              <div id="searchResults" class="search-results"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-channels" class="view">
+          <div class="page-grid">
+            <div class="chat-area liquid-glass page-panel">
+              <div class="channels-header-bar">
+                <button id="reloadChannelsBtn" class="btn-secondary btn-glass" data-i18n="btn_reload">Reload</button>
+              </div>
+              <div id="channelsGrid" class="channels-grid fixed-card-grid"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-browser" class="view">
+          <div class="page-grid">
+            <div class="chat-area liquid-glass page-panel">
+              <div class="panel-header">
+                <div>
+                  <h3 data-i18n="browser_user_title">Browser</h3>
+                  <p class="page-sub" data-i18n="browser_user_subtitle">Choose how WeClaw should use a browser.</p>
+                </div>
+                <div class="browser-toolbar">
+                  <button id="reloadBrowserBtn" class="btn-secondary btn-glass btn-sm" data-i18n="btn_reload">Reload</button>
+                  <button id="detectBrowserInstallBtn" class="btn-secondary btn-glass btn-sm" data-i18n="browser_detect_btn">Detect</button>
+                </div>
+              </div>
+              <div id="browserUserModesGrid" class="browser-mode-grid"></div>
+              <div id="browserUserStatusPanel" class="state-box browser-user-status"></div>
+              <div id="browserUserSetupPanel" class="browser-user-setup"></div>
+              <div class="browser-primary-actions">
+                <button id="launchBrowserBtn" class="btn-primary" data-i18n="browser_launch_btn">Launch Browser</button>
+                <button id="disconnectBrowserBtn" class="btn-secondary btn-glass" data-i18n="browser_disconnect_btn">Disconnect</button>
+              </div>
+              <div id="browserModeHint" class="page-sub browser-mode-hint" data-i18n="browser_mode_hint">
+                WeClaw keeps using this browser until you close it.
+              </div>
+            </div>
+            <div class="chat-area liquid-glass page-panel">
+              <details id="browserAdvancedDetails" class="browser-advanced-details">
+                <summary id="browserAdvancedSummary" data-i18n="browser_advanced_summary">Advanced Settings</summary>
+                <div class="browser-advanced-stack">
+                  <div class="panel-header">
+                    <h3 data-i18n="browser_identity_settings_title">Browser Identity</h3>
+                  </div>
+                  <div id="browserIdentityPanel" class="state-box"></div>
+
+                  <div class="panel-header">
+                    <h3 data-i18n="browser_overview_title">Browser Runtime</h3>
+                  </div>
+                  <div id="browserOverview" class="state-box"></div>
+
+                  <div class="panel-header">
+                    <h3 data-i18n="browser_profiles_title">Profiles</h3>
+                  </div>
+                  <div id="browserProfilesGrid" class="profiles-grid fixed-card-grid"></div>
+
+                  <div class="panel-header">
+                    <h3 data-i18n="browser_install_title">Managed Chromium</h3>
+                  </div>
+                  <div id="browserInstallPanel" class="state-box"></div>
+                  <div class="browser-actions-row">
+                    <button id="installManagedBrowserBtn" class="btn-primary" data-i18n="browser_install_btn">Install Managed Chromium</button>
+                    <button id="reinstallManagedBrowserBtn" class="btn-secondary btn-glass">Reinstall</button>
+                    <button id="removeManagedBrowserBtn" class="btn-secondary btn-glass">Remove</button>
+                    <button id="cancelManagedBrowserBtn" class="btn-secondary btn-glass">Cancel</button>
+                  </div>
+
+                  <div class="panel-header">
+                    <h3 data-i18n="browser_diagnostics_title">Diagnostics</h3>
+                  </div>
+                  <div id="browserDiagnosticsPanel" class="browser-diagnostics-list"></div>
+
+                  <div class="panel-header">
+                    <h3 data-i18n="browser_binding_title">Session Binding</h3>
+                  </div>
+                  <div id="browserBindingPanel" class="state-box"></div>
+                </div>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-workspace" class="view">
+          <div class="page-grid workspace-page-grid">
+            <div class="workspace-browser-layout">
+              <aside class="workspace-tree-panel liquid-glass glass-glow">
+                <div class="docs-tree-head">
+                  <div class="workspace-tree-heading">
+                    <h3 data-i18n="workspace_title">Workspace</h3>
+                    <p class="page-sub" data-i18n="workspace_subtitle">Browse the workspace tree and preview Markdown files.</p>
+                  </div>
+                </div>
+                <div class="workspace-tree-search">
+                  <input
+                    id="workspaceTreeSearch"
+                    class="liquid-glass"
+                    data-i18n-placeholder="workspace_tree_search_placeholder"
+                    placeholder="Search filenames..."
+                  />
+                </div>
+                <div id="workspaceTreeList" class="docs-tree"></div>
+                <div class="workspace-tree-footer">
+                  <span id="workspaceRootLabel" class="page-sub docs-root-label"></span>
+                  <button id="reloadWorkspaceTreeBtn" class="btn-secondary btn-glass btn-sm" data-i18n="btn_reload">Reload</button>
+                </div>
+              </aside>
+              <section class="workspace-browser-main docs-preview-panel liquid-glass glass-glow">
+                <div class="docs-preview-head">
+                  <div>
+                    <div class="docs-preview-kicker" data-i18n="workspace_preview_title">Preview</div>
+                    <div id="workspaceCurrentPath" class="docs-current-path">workspace</div>
+                  </div>
+                  <div class="row-actions">
+                    <button id="workspaceEditBtn" class="btn-secondary btn-glass btn-sm" data-i18n="workspace_edit">Edit</button>
+                    <button id="workspaceCancelBtn" class="btn-secondary btn-glass btn-sm" data-i18n="btn_close">Cancel</button>
+                    <button id="workspaceSaveBtn" class="btn-primary btn-sm" data-i18n="btn_save">Save</button>
+                  </div>
+                </div>
+                <textarea id="workspaceEditor" class="workspace-editor liquid-glass" spellcheck="false"></textarea>
+                <article id="workspacePreview" class="workspace-preview docs-preview markdown"></article>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-alarms" class="view">
+          <div class="page-grid">
+            <div class="chat-area liquid-glass page-panel">
+              <div class="panel-header">
+                <div>
+                  <h3 data-i18n="alarms_title">瀹氭椂浠诲姟</h3>
+                  <p class="page-sub" data-i18n="alarms_subtitle">杩欓噷鍙兘鏌ョ湅銆佹殏鍋溿€佹仮澶嶅拰鍙栨秷宸叉湁浠诲姟銆傚垱寤轰换鍔″繀椤婚€氳繃瀵硅瘽閲岀殑缁熶竴闂归挓宸ュ叿瀹屾垚銆?/p>
+                </div>
+                <button id="reloadAlarmsBtn" class="btn-secondary btn-glass btn-sm" data-i18n="btn_reload">Reload</button>
+              </div>
+              <div id="alarmsSummary" class="state-box"></div>
+            </div>
+            <div class="chat-area liquid-glass page-panel">
+              <div class="panel-header">
+                <h3 data-i18n="alarms_active_title">褰撳墠浠诲姟</h3>
+              </div>
+              <div id="activeAlarmsList" class="table-list"></div>
+            </div>
+            <div class="chat-area liquid-glass page-panel">
+              <div class="panel-header">
+                <h3 data-i18n="alarms_finished_title">宸茬粨鏉熶换鍔?/h3>
+              </div>
+              <div id="finishedAlarmsList" class="table-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-skills" class="view">
+          <div class="page-grid">
+            <div class="chat-area liquid-glass page-panel">
+              <div class="panel-header">
+                <h3 data-i18n="skills_title">Skills</h3>
+                <div class="row-actions">
+                  <button id="openSkillsStoreBtn" class="btn-secondary btn-glass btn-sm" data-i18n="skills_store_btn">Skills Store</button>
+                  <button id="reloadSkillsBtn" class="btn-secondary btn-glass btn-sm" data-i18n="btn_reload">Reload</button>
+                </div>
+              </div>
+              <div id="skillsContent" class="skills-content">
+                <div id="skillsStorePanel" class="panel-block skills-store-panel hidden">
+                  <div class="panel-header">
+                    <div class="skills-store-head">
+                      <h4 data-i18n="skills_store_panel_title">Skills Store Preview</h4>
+                      <p class="panel-subtext" data-i18n="skills_store_panel_desc">Future source, marketplace, install and sync actions will live here.</p>
+                    </div>
+                    <button id="closeSkillsStoreBtn" class="btn-secondary btn-glass btn-sm" data-i18n="btn_close">Close</button>
+                  </div>
+                  <div class="skills-store-grid">
+                    <div class="card-meta skills-store-card">
+                      <div class="model-fact-label" data-i18n="skills_store_capability_1_title">Planned Source Hub</div>
+                      <div class="model-fact-value" data-i18n="skills_store_capability_1_desc">Browse local, imported and future remote sources in one place.</div>
+                    </div>
+                    <div class="card-meta skills-store-card">
+                      <div class="model-fact-label" data-i18n="skills_store_capability_2_title">Install Pipeline</div>
+                      <div class="model-fact-value" data-i18n="skills_store_capability_2_desc">Use the same shell to host install, update and sync progress later.</div>
+                    </div>
+                    <div class="card-meta skills-store-card">
+                      <div class="model-fact-label" data-i18n="skills_store_capability_3_title">Registry First</div>
+                      <div class="model-fact-value" data-i18n="skills_store_capability_3_desc">Keep store actions aligned with registry-driven activation instead of adding side paths.</div>
+                    </div>
+                  </div>
+                </div>
+                <div id="skillsEmptyState" class="panel-block hidden" data-i18n="no_skills">No skills found.</div>
+                <div id="skillsPopulatedState" class="hidden">
+                  <div class="skills-section">
+                    <div class="panel-header">
+                      <h4 data-i18n="skills_activated_title">Activated Skills</h4>
+                    </div>
+                    <div id="activatedSkillsGrid" class="skills-grid fixed-card-grid"></div>
+                  </div>
+                  <div class="skills-section">
+                    <div class="panel-header">
+                      <h4 data-i18n="skills_inactivated_title">Inactivated Skills</h4>
+                    </div>
+                    <div id="inactivatedSkillsGrid" class="skills-grid fixed-card-grid"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-mcp" class="view">
+          <div class="page-grid">
+            <div class="chat-area liquid-glass page-panel">
+              <div class="mcp-header-bar">
+                <button id="newLocalMcpBtn" class="btn-primary" data-i18n="mcp_btn_new_local">New Local</button>
+                <button id="newRemoteMcpBtn" class="btn-secondary btn-glass" data-i18n="mcp_btn_new_remote">New Remote</button>
+                <button id="refreshMcpBtn" class="btn-secondary btn-glass" data-i18n="btn_refresh">Refresh</button>
+              </div>
+              <div id="mcpSummary" class="state-box"></div>
+            </div>
+            <div class="chat-area liquid-glass page-panel">
+              <div class="content-header compact-head">
+                <div>
+                  <h3 data-i18n="mcp_clients_title">Configured Clients</h3>
+                  <p class="page-sub" data-i18n="mcp_clients_subtitle">Create, edit, enable, disable, or remove MCP clients at runtime.</p>
+                </div>
+              </div>
+              <div id="mcpClientsGrid" class="mcp-grid fixed-card-grid"></div>
+            </div>
+            <div class="chat-area liquid-glass page-panel">
+                <div class="content-header compact-head">
+                  <div>
+                    <h3 data-i18n="mcp_discovered_title">Available Local Servers</h3>
+                    <p class="page-sub" data-i18n="mcp_discovered_subtitle">Detected servers are shown here, but only enabled clients become active tools.</p>
+                  </div>
+                </div>
+                <div id="mcpDiscoveredGrid" class="mcp-grid fixed-card-grid"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-models" class="view">
+          <div class="page-grid">
+            <div class="chat-area liquid-glass page-panel">
+              <div class="models-header-bar">
+                <button id="newModelBtn" class="btn-primary" data-i18n="btn_new">New</button>
+                <button id="reloadModelsBtn" class="btn-secondary btn-glass" data-i18n="btn_reload">Reload</button>
+              </div>
+              <div id="modelTypeGrid" class="profiles-grid fixed-card-grid"></div>
+            </div>
+            <div class="chat-area liquid-glass page-panel">
+              <div id="modelRuntimeState" class="state-box"></div>
+            </div>
+            <div class="chat-area liquid-glass page-panel">
+              <h3 data-i18n="profiles_title">Profiles</h3>
+              <div id="modelProfilesGrid" class="profiles-grid fixed-card-grid"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-billing" class="view">
+          <div class="page-grid">
+            <div class="chat-area liquid-glass page-panel">
+              <div class="billing-header-bar">
+                <button id="refreshBillingBtn" class="btn-secondary btn-glass" data-i18n="btn_refresh">Refresh</button>
+              </div>
+              <div class="billing-filter-grid">
+                <select id="billingQuickRange" class="liquid-glass">
+                  <option value="12h" data-i18n="billing_range_12h">Last 12h</option>
+                  <option value="24h" data-i18n="billing_range_24h">Last 24h</option>
+                  <option value="7d" data-i18n="billing_range_7d">Last 7d</option>
+                  <option value="30d" data-i18n="billing_range_30d">Last 30d</option>
+                  <option value="custom" data-i18n="billing_range_custom">Custom</option>
+                </select>
+                <input id="billingFromInput" type="datetime-local" class="liquid-glass" />
+                <input id="billingToInput" type="datetime-local" class="liquid-glass" />
+                <select id="billingStatusSelect" class="liquid-glass">
+                  <option value="all" data-i18n="billing_status_all">all</option>
+                  <option value="success" data-i18n="billing_status_success">success</option>
+                  <option value="failed" data-i18n="billing_status_failed">failed</option>
+                </select>
+                <button id="applyBillingFiltersBtn" class="btn-primary" data-i18n="billing_apply_filters">Apply</button>
+              </div>
+              <div id="billingStatusBox" class="state-box"></div>
+            </div>
+
+            <div class="billing-summary-grid page-panel-grid">
+              <div class="billing-stat-card liquid-glass panel-surface"><div data-i18n="billing_calls_total">Total Calls</div><b id="billingTotalCalls">0</b></div>
+              <div class="billing-stat-card liquid-glass panel-surface"><div data-i18n="billing_success_calls">Success</div><b id="billingSuccessCalls">0</b></div>
+              <div class="billing-stat-card liquid-glass panel-surface"><div data-i18n="billing_failed_calls">Failed</div><b id="billingFailedCalls">0</b></div>
+              <div class="billing-stat-card liquid-glass panel-surface"><div data-i18n="billing_failure_rate">Failure Rate</div><b id="billingFailureRate">0%</b></div>
+              <div class="billing-stat-card liquid-glass panel-surface"><div data-i18n="billing_prompt_tokens">Prompt Tokens</div><b id="billingPromptTokens">0</b></div>
+              <div class="billing-stat-card liquid-glass panel-surface"><div data-i18n="billing_completion_tokens">Completion Tokens</div><b id="billingCompletionTokens">0</b></div>
+              <div class="billing-stat-card liquid-glass panel-surface"><div data-i18n="billing_tokens_total">Total Tokens</div><b id="billingTokensTotal">0</b></div>
+              <div class="billing-stat-card liquid-glass panel-surface"><div data-i18n="billing_latency_p95">P95 Latency</div><b id="billingP95Latency">0ms</b></div>
+            </div>
+
+            <div class="chat-area liquid-glass page-panel billing-list-panel">
+              <div class="billing-list-head">
+                <h3 data-i18n="billing_call_list">Call Details</h3>
+                <div class="row-actions">
+                  <button id="billingPrevBtn" class="btn-secondary btn-glass" data-i18n="billing_prev_page">Prev</button>
+                  <span id="billingPageInfo">1 / 1</span>
+                  <button id="billingNextBtn" class="btn-secondary btn-glass" data-i18n="billing_next_page">Next</button>
+                </div>
+              </div>
+              <div id="billingCallsTable" class="billing-table"></div>
+            </div>
+          </div>
+        </section>
+        </div>
+      </main>
+    </div>
+
+    <div id="channelDrawer" class="drawer-overlay hidden">
+      <aside class="drawer-panel panel-surface">
+        <header class="drawer-head">
+          <h3 id="channelDrawerTitle">Channel Settings</h3>
+          <button id="closeChannelDrawerBtn" class="drawer-close" type="button" aria-label="Close drawer" title="Close drawer">&times;</button>
+        </header>
+        <div class="drawer-body">
+          <div class="form-grid">
+          <label class="inline-check">
+            <input type="checkbox" id="channelEnabledInput" class="switch-input" />
+            <span class="switch-slider" aria-hidden="true"><span class="switch-thumb"></span></span>
+            <span class="check-label" data-i18n="channel_enabled_label">Enabled</span>
+          </label>
+          <label class="channel-field">
+            <span data-i18n="channel_prefix_label">Bot Prefix</span>
+            <input
+              id="channelPrefixInput"
+              type="text"
+              data-i18n-placeholder="channel_prefix_placeholder"
+              placeholder="prefix (optional)"
+            />
+          </label>
+          <div id="channelFields" class="channel-fields"></div>
+          <div id="channelDrawerHint" class="state-box"></div>
+            <div class="row-actions">
+              <button id="saveChannelBtn" class="btn-primary" data-i18n="btn_save">Save</button>
+              <button id="cancelChannelBtn" class="btn-ghost" data-i18n="btn_cancel">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="modelModal" class="drawer-overlay hidden">
+      <aside class="drawer-panel panel-surface">
+        <header class="drawer-head">
+          <h3 id="modelModalTitle">New Model</h3>
+          <button id="closeModelModalBtn" class="drawer-close" type="button" aria-label="Close drawer" title="Close drawer">&times;</button>
+        </header>
+        <div class="drawer-body">
+          <div class="form-grid model-form">
+          <label class="model-field">
+            <span>Model Type</span>
+            <select id="modelTypeSelect"></select>
+          </label>
+          <label class="model-field">
+            <span data-i18n="field_profile_id">Profile ID</span>
+            <input id="modelProfileIdInput" data-i18n-placeholder="profile_id_placeholder" placeholder="profile_id" />
+          </label>
+          <label class="model-field">
+            <span data-i18n="field_provider">Provider</span>
+            <select id="modelProviderSelect"></select>
+          </label>
+          <label class="model-field">
+            <span data-i18n="field_base_url">Base URL</span>
+            <input id="modelBaseUrlInput" data-i18n-placeholder="base_url_placeholder" placeholder="base_url" />
+          </label>
+          <label class="model-field">
+            <span data-i18n="field_model_name">Model</span>
+            <input id="modelNameInput" data-i18n-placeholder="model_name_placeholder" placeholder="model" />
+          </label>
+          <label class="model-field">
+            <span data-i18n="field_api_key">API Key</span>
+            <input id="modelApiKeyInput" type="password" required data-i18n-placeholder="api_key_placeholder" placeholder="api_key" />
+          </label>
+          <label class="inline-check">
+            <input type="checkbox" id="modelClearApiKeyInput" class="switch-input" />
+            <span class="switch-slider" aria-hidden="true"><span class="switch-thumb"></span></span>
+            <span class="check-label" data-i18n="clear_api_key">Clear existing API key</span>
+          </label>
+          <label class="model-field">
+            <span data-i18n="field_max_tokens">Max Tokens</span>
+            <input id="modelMaxTokensInput" type="number" min="1" data-i18n-placeholder="max_tokens_placeholder" placeholder="max_tokens (optional)" />
+          </label>
+          <label class="model-field">
+            <span data-i18n="field_timeout">Timeout (s)</span>
+            <input id="modelTimeoutInput" type="number" step="0.1" min="1" data-i18n-placeholder="timeout_placeholder" placeholder="timeout seconds (optional)" />
+          </label>
+          <label class="model-field">
+            <span data-i18n="field_temperature">Temperature</span>
+            <input id="modelTemperatureInput" type="number" step="0.01" data-i18n-placeholder="temperature_placeholder" placeholder="temperature (optional)" />
+          </label>
+          <label class="model-field">
+            <span data-i18n="field_top_p">Top-p</span>
+            <input id="modelTopPInput" type="number" step="0.01" data-i18n-placeholder="top_p_placeholder" placeholder="top_p (optional)" />
+          </label>
+            <div class="row-actions">
+              <button id="saveModelProfileBtn" class="btn-primary" data-i18n="btn_save">Save</button>
+              <button id="cancelModelModalBtn" class="btn-ghost" data-i18n="btn_cancel">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="mcpModal" class="drawer-overlay hidden">
+      <aside class="drawer-panel panel-surface">
+        <header class="drawer-head">
+          <h3 id="mcpModalTitle" data-i18n="mcp_modal_create">Create MCP Client</h3>
+          <button id="closeMcpModalBtn" class="drawer-close" type="button" aria-label="Close drawer" title="Close drawer">&times;</button>
+        </header>
+        <div class="drawer-body">
+          <div class="form-grid mcp-form">
+          <label class="model-field">
+            <span data-i18n="mcp_field_client_id">Client ID</span>
+            <input id="mcpClientIdInput" data-i18n-placeholder="mcp_client_id_placeholder" placeholder="client_id" />
+          </label>
+          <label class="model-field">
+            <span data-i18n="mcp_field_name">Name</span>
+            <input id="mcpClientNameInput" data-i18n-placeholder="mcp_client_name_placeholder" placeholder="display name" />
+          </label>
+          <label class="model-field">
+            <span data-i18n="mcp_field_description">Description</span>
+            <input
+              id="mcpClientDescriptionInput"
+              data-i18n-placeholder="mcp_client_description_placeholder"
+              placeholder="optional description"
+            />
+          </label>
+          <label class="model-field">
+            <span data-i18n="mcp_field_mode">Mode</span>
+            <select id="mcpClientModeSelect">
+              <option value="local" data-i18n="mcp_mode_local">Local</option>
+              <option value="remote" data-i18n="mcp_mode_remote">Remote</option>
+            </select>
+          </label>
+          <label id="mcpClientServerField" class="model-field">
+            <span data-i18n="mcp_field_local_server">Local Server</span>
+            <select id="mcpClientServerSelect"></select>
+          </label>
+          <label id="mcpClientCommandField" class="model-field">
+            <span data-i18n="mcp_field_local_command">Local Command</span>
+            <input id="mcpClientCommandInput" data-i18n-placeholder="mcp_local_command_placeholder" placeholder="python" />
+          </label>
+          <label id="mcpClientArgsField" class="model-field">
+            <span data-i18n="mcp_field_local_args">Command Args</span>
+            <textarea id="mcpClientArgsInput" rows="3" data-i18n-placeholder="mcp_local_args_placeholder" placeholder="-m&#10;some_module"></textarea>
+          </label>
+          <label id="mcpClientCwdField" class="model-field">
+            <span data-i18n="mcp_field_local_cwd">Working Directory</span>
+            <input id="mcpClientCwdInput" data-i18n-placeholder="mcp_local_cwd_placeholder" placeholder="optional cwd path" />
+          </label>
+          <label id="mcpClientEndpointField" class="model-field">
+            <span data-i18n="mcp_field_endpoint">Endpoint</span>
+            <input
+              id="mcpClientEndpointInput"
+              data-i18n-placeholder="mcp_endpoint_placeholder"
+              placeholder="https://open.bigmodel.cn/api/mcp-broker/proxy/web-search/mcp"
+            />
+          </label>
+          <div id="mcpSecretSlots" class="drawer-subgrid"></div>
+          <details id="mcpToolsPanel" class="panel-block">
+            <summary>Enabled Tools</summary>
+            <div id="mcpToolsList" class="mcp-tools-editor"></div>
+          </details>
+          <label class="inline-check">
+            <input type="checkbox" id="mcpClientEnabledInput" class="switch-input" checked />
+            <span class="switch-slider" aria-hidden="true"><span class="switch-thumb"></span></span>
+            <span class="check-label" data-i18n="hb_enabled">Enabled</span>
+          </label>
+          <div id="mcpSecretHelp" class="state-box"></div>
+            <div class="row-actions">
+              <button id="saveMcpClientBtn" class="btn-primary" data-i18n="btn_save">Save</button>
+              <button id="cancelMcpModalBtn" class="btn-ghost" data-i18n="btn_cancel">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Settings Drawer -->
+    <div id="settingsDrawer" class="drawer-overlay hidden">
+      <aside class="drawer-panel panel-surface settings-panel">
+        <header class="drawer-head">
+          <h3 data-i18n="settings_title">Settings</h3>
+          <button id="closeSettingsBtn" class="drawer-close" type="button" aria-label="Close drawer" title="Close drawer">&times;</button>
+        </header>
+        <div class="drawer-body">
+          <div class="settings-content">
+          <!-- Theme Mode Toggle -->
+          <div class="settings-section">
+            <h4 data-i18n="settings_theme_mode">Theme Mode</h4>
+            <div class="theme-mode-toggle">
+              <button class="mode-btn active" data-mode="light">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <span data-i18n="theme_light">Light</span>
+              </button>
+              <button class="mode-btn" data-mode="dark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <span data-i18n="theme_dark">Dark</span>
+              </button>
+              <button class="mode-btn" data-mode="auto">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>
+                <span data-i18n="theme_auto">Auto</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h4 data-i18n="settings_reply_language">Reply Language</h4>
+            <select id="replyLanguageSelect" class="liquid-glass settings-select">
+              <option value="zh" data-i18n="settings_reply_language_zh">涓枃</option>
+              <option value="en" data-i18n="settings_reply_language_en">English</option>
+            </select>
+            <p class="settings-about-text" data-i18n="settings_reply_language_hint">Only saved in frontend settings for now.</p>
+          </div>
+
+          <!-- About -->
+            <div class="settings-section">
+              <h4 data-i18n="settings_about">About</h4>
+              <p class="settings-about-text" data-i18n="settings_about_text">WeClaw Console - AI Agent Management Interface</p>
+              <p class="settings-version">v2025.03.15</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="billingDetailModal" class="modal-overlay hidden">
+      <div class="modal-card panel-surface billing-detail-modal">
+        <header class="modal-head">
+          <h3 data-i18n="billing_detail_title">Call Detail</h3>
+          <button id="closeBillingDetailBtn" class="btn-ghost">X</button>
+        </header>
+        <pre id="billingDetailPre" class="billing-detail-pre"></pre>
+      </div>
+    </div>
+
+    <div id="noticeModal" class="modal-overlay hidden">
+      <div id="noticeModalCard" class="modal-card panel-surface notice-modal notice-modal--info" role="alertdialog" aria-modal="true" aria-labelledby="noticeModalTitle" aria-describedby="noticeModalBody">
+        <header class="modal-head notice-modal__head">
+          <div class="notice-modal__title-wrap">
+            <span id="noticeModalBadge" class="notice-modal__badge">Info</span>
+            <h3 id="noticeModalTitle">Notice</h3>
+          </div>
+          <button id="closeNoticeModalBtn" class="drawer-close" type="button" aria-label="Close notice" title="Close notice">&times;</button>
+        </header>
+        <div class="notice-modal__body-wrap">
+          <pre id="noticeModalBody" class="notice-modal__body"></pre>
+        </div>
+        <div class="notice-modal__actions">
+          <button id="confirmNoticeModalBtn" class="btn-primary" type="button" data-i18n="btn_close">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="taskBoardModal" class="modal-overlay hidden">
+      <div id="taskBoardModalCard" class="modal-card panel-surface task-board-modal" role="dialog" aria-modal="true" aria-labelledby="taskBoardModalTitle">
+        <header class="modal-head task-board-modal__head">
+          <div class="task-board-modal__title-wrap">
+            <div class="task-board-modal__eyebrow" data-i18n="task_board_title">Task</div>
+            <h3 id="taskBoardModalTitle" class="task-board-modal__title">Task</h3>
+          </div>
+          <button id="closeTaskBoardModalBtn" class="drawer-close" type="button" aria-label="Close task detail" title="Close task detail">&times;</button>
+        </header>
+        <div id="taskBoardDetail" class="task-board-detail">
+          <div id="taskBoardSummary" class="task-board-summary"></div>
+          <div class="task-board-modal__content">
+            <section class="task-board-section">
+              <div class="task-board-section-title" data-i18n="task_board_plan_title">任务计划</div>
+              <div id="taskBoardPlan" class="task-board-plan markdown"></div>
+            </section>
+            <section class="task-board-section">
+              <div class="task-board-section-title" data-i18n="task_board_activity_title">最近动态</div>
+              <div id="eventTimeline" class="trace-list task-board-activity-list"></div>
+            </section>
+            <section class="task-board-section task-board-messages-section">
+              <div class="task-board-section-title" data-i18n="task_board_messages_title">执行消息</div>
+              <div id="taskBoardMessages" class="task-board-messages"></div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="imagePreviewModal" class="modal-overlay hidden">
+      <div id="imagePreviewCard" class="modal-card panel-surface image-preview-modal" role="dialog" aria-modal="true" aria-labelledby="imagePreviewTitle">
+        <header class="modal-head image-preview-modal__head">
+          <div class="image-preview-modal__title-wrap">
+            <h3 id="imagePreviewTitle" class="image-preview-modal__title">Image Preview</h3>
+            <div id="imagePreviewMeta" class="image-preview-modal__meta"></div>
+          </div>
+          <button id="closeImagePreviewBtn" class="drawer-close" type="button" aria-label="Close image preview" title="Close image preview">&times;</button>
+        </header>
+        <div class="image-preview-modal__body">
+          <img id="imagePreviewImg" class="image-preview-modal__img" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.7/dist/purify.min.js"></script>
+    <script src="/assets/app.js?v=20260415v1"></script>
+  </body>
+</html>

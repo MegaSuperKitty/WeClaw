@@ -264,16 +264,16 @@ At this point, it is time to actually create the skill.
 Skip this step only if the skill being developed already exists, and iteration or packaging is needed. In this case, continue to the next step.
 
 When creating a new skill from scratch, use the `skill_init` tool. It creates the skill directory under `./skills` and generates the required template files.
-After creation, use `skill_exec` with `skill=<new-skill-name>` to run commands inside that skill folder (e.g., edit SKILL.md, add `scripts/` or `references/`).
+After creation, use the `skill` tool to load these instructions again if needed, then use the shared filesystem tools or `bash` to edit files inside that skill folder (for example, customize `SKILL.md`, add `scripts/`, or add `references/`).
 
 Examples:
 
 - Create `references/` directory:
-  `skill_exec {skill: "<new-skill-name>", command: "New-Item -ItemType Directory -Path references"}`
+  `bash {command: "New-Item -ItemType Directory -Path references", workdir: "<absolute-path-to-new-skill>"}`
 - Create `scripts/` directory:
-  `skill_exec {skill: "<new-skill-name>", command: "New-Item -ItemType Directory -Path scripts"}`
+  `bash {command: "New-Item -ItemType Directory -Path scripts", workdir: "<absolute-path-to-new-skill>"}`
 - Overwrite SKILL.md:
-  `skill_exec {skill: "<new-skill-name>", command: "Set-Content -Path SKILL.md -Value '<your content>'"}`
+  `write_file {path: "<absolute-path-to-new-skill>/SKILL.md", content: "<your content>"}`
 
 Usage:
 

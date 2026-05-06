@@ -1,0 +1,12 @@
+client_id: vision_models
+name: Vision Models
+description: Vision understanding tools backed by typed model config.
+enabled: false
+mode: local
+transport: stdio
+server_id: vision_models
+enabled_tools: []
+env: {}
+headers: {}
+secret_refs: {}
+metadata: {}

@@ -1,0 +1,7 @@
+{
+  "id": "echo",
+  "kind": "channel",
+  "channels": ["echo"],
+  "name": "Echo",
+  "description": "Local echo channel used to validate the WeClaw OpenClaw host."
+}

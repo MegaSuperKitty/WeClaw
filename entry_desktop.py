@@ -17,7 +17,7 @@ DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 7788
 
 # Icon path - user can replace this file with their own icon
-ICON_PATH = Path(__file__).parent / "angel_console" / "web" / "assets" / "icons" / "app-icon.png"
+ICON_PATH = Path(__file__).parent / "WeClaw_console" / "web" / "assets" / "icons" / "app-icon.png"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -68,7 +68,7 @@ def _start_server(host: str, port: int, ready_event: threading.Event) -> None:
     logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
 
     config = uvicorn.Config(
-        "angel_console.app:app",
+        "WeClaw_console.app:app",
         host=host,
         port=port,
         reload=False,

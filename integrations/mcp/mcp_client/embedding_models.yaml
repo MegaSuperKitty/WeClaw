@@ -1,0 +1,12 @@
+client_id: embedding_models
+name: Embedding Models
+description: Text and multimodal embedding tools backed by typed model config.
+enabled: false
+mode: local
+transport: stdio
+server_id: embedding_models
+enabled_tools: []
+env: {}
+headers: {}
+secret_refs: {}
+metadata: {}
