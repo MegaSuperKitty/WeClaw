@@ -39,6 +39,10 @@ WeClaw can also be accessed via a CLI, and can be customized to integrate with p
 - **2026-03-09** 🚪 Unified the project startup flow around the **Web Console**:
   - Added `entry_weclaw_console.py` as the recommended root entrypoint
   - Added `python -m WeClaw_console` package startup
+- **2026-05-08** 💬 Added **free-form conversation**:
+  - Talk with the agent continuously without starting an explicit task
+  - Use the main session / task session mechanism to separate open-ended chat from executable tasks
+  - Move naturally from conversation into task execution while keeping context continuity
 
 ## Core Highlights
 
@@ -48,6 +52,7 @@ WeClaw can also be accessed via a CLI, and can be customized to integrate with p
 - Context engineering: compression, unloading, and filesystem support to avoid context overflow
 - Secure sandbox and async execution: more stable long-running task pipelines
 - Skills integration: unified mechanism supporting customization and extension
+- Free-form conversation alongside task sessions: switch naturally between everyday chat and executable tasks
 - Task state management: supports long-chain, multi-turn task automation
 - Stable execution strategy: plan first, then act
 - Experience learning is being integrated: improves with usage
@@ -83,7 +88,7 @@ By default, the console binds to `127.0.0.1` and is intended for local developme
 
 Main modules:
 
-- Chat: session management, streaming responses, and tool trace visualization
+- Chat: free-form conversation, task session management, streaming responses, and tool trace visualization
 - Voice Input: browser-side recording with local speech-to-text (Chinese and English)
 - Search Tasks: cross-session retrieval with fast jump to relevant context
 - Channels: unified channel configuration and status for Web / CLI / QQ / Discord / Plugin Channel Host
