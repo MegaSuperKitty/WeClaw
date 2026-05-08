@@ -1,4 +1,4 @@
-![LittleAngelBot Logo](docs/logo.png)
+![WeClaw Logo](docs/logo.png)
 
 <div align="center">
   <h1>WeClaw: A Personal Assistant Powered by Mobile QQ and Windows PC Collaboration</h1>
@@ -17,17 +17,18 @@ WeClaw can also be accessed via a CLI, and can be customized to integrate with p
 ## GUI Preview
 
 <div align="center">
-  <img src="docs/GUI.png" alt="LittleAngel Agent Console GUI" width="1100" />
+  <img src="docs/GUI.png" alt="WeClaw Agent Console GUI" width="1100" />
 </div>
 
 ## Timeline
 
 - **2026-02-03** 🎉 WeClaw is now open source.
-- **2026-02-23** 🖥️ Added a graphical **Agent Console** (`angel_console/`) for unified operations:
+- **2026-02-23** 🖥️ Added a graphical **Agent Console** (`WeClaw_console/`) for unified operations:
   - Chat (SSE streaming + ReAct trace)
   - Voice input (browser recording + local transcription)
   - Search tasks (session retrieval and context navigation)
   - Channels (Web / CLI / QQ / Discord)
+  - Plugin Channel Host (workspace-installed TypeScript channel runtime)
   - Scheduled tasks (Cron) and heartbeat
   - Skills management
   - Model configuration and switching
@@ -36,8 +37,12 @@ WeClaw can also be accessed via a CLI, and can be customized to integrate with p
   - Local and remote MCP client runtime
   - Web Console MCP discovery, configuration, and runtime management
 - **2026-03-09** 🚪 Unified the project startup flow around the **Web Console**:
-  - Added `entry_console.py` as the recommended root entrypoint
-  - Added `python -m angel_console` package startup
+  - Added `entry_weclaw_console.py` as the recommended root entrypoint
+  - Added `python -m WeClaw_console` package startup
+- **2026-05-08** 💬 Added **free-form conversation**:
+  - Talk with the agent continuously without starting an explicit task
+  - Use the main session / task session mechanism to separate open-ended chat from executable tasks
+  - Move naturally from conversation into task execution while keeping context continuity
 
 ## Core Highlights
 
@@ -47,6 +52,7 @@ WeClaw can also be accessed via a CLI, and can be customized to integrate with p
 - Context engineering: compression, unloading, and filesystem support to avoid context overflow
 - Secure sandbox and async execution: more stable long-running task pipelines
 - Skills integration: unified mechanism supporting customization and extension
+- Free-form conversation alongside task sessions: switch naturally between everyday chat and executable tasks
 - Task state management: supports long-chain, multi-turn task automation
 - Stable execution strategy: plan first, then act
 - Experience learning is being integrated: improves with usage
@@ -77,15 +83,15 @@ WeClaw can also be accessed via a CLI, and can be customized to integrate with p
 
 ## Graphical Agent Console
 
-The project now includes a local graphical control plane in `angel_console/` to manage core agent capabilities in one place.  
+The project now includes a local graphical control plane in `WeClaw_console/` to manage core agent capabilities in one place.
 By default, the console binds to `127.0.0.1` and is intended for local development and operations.
 
 Main modules:
 
-- Chat: session management, streaming responses, and tool trace visualization
+- Chat: free-form conversation, task session management, streaming responses, and tool trace visualization
 - Voice Input: browser-side recording with local speech-to-text (Chinese and English)
 - Search Tasks: cross-session retrieval with fast jump to relevant context
-- Channels: unified channel configuration and status for Web / CLI / QQ / Discord
+- Channels: unified channel configuration and status for Web / CLI / QQ / Discord / Plugin Channel Host
 - Cron & Heartbeat: periodic jobs, manual triggers, and runtime status controls
 - Skills: discover and manage available skills from the workspace
 - Models: configure multiple providers/profiles and switch active runtime model
@@ -96,33 +102,27 @@ Main modules:
 The Web Console is now the recommended primary entrypoint for the project.
 
 ```powershell
-python entry_console.py
+python entry_weclaw_console.py
 ```
 
 Alternative package-style startup:
 
 ```powershell
-python -m angel_console
+python -m WeClaw_console
 ```
 
 Then open `http://127.0.0.1:7788` in your browser.
 
 Recommended workflow: start from the Web Console first, then use the `Channels` page to manage CLI / QQ / Discord.
 
+If you enable `Plugin Channel Host`, WeClaw will prepare its Node runtime under `~/.weclaw/agents/<agent_id>/runtime/plugin_channel_host/` on first start, instead of relying on checked-in `node_modules/` or `dist/` inside the source tree.
+
 Direct channel scripts are still supported for advanced use:
 
 ```powershell
 python channels/cli.py
-python channels/qq.py
-python channels/discord.py
-```
-
-Legacy compatibility wrappers are also still available:
-
-```powershell
-python entry_cli.py
-python entry_qq.py
-python entry_discord.py
+python channels/adapters/qq.py
+python channels/adapters/discord.py
 ```
 
 ## Use Cases
@@ -136,6 +136,8 @@ You can direct the agent anytime, anywhere (on the subway, while traveling, or o
 
 ## Prerequisites
 
+For normal use, configure model providers, profiles, API keys, and the active model from the Web Console `Models` page. Environment variables and `~/.weclaw/agents/<agent_id>/runtime/secrets.yaml` are mainly for bootstrap, headless use, or manual recovery.
+
 Environment variables:
 
 - `LLM_API_KEY` (required, for model calls)
@@ -146,11 +148,11 @@ Environment variables:
 - `ZHIPU_API_KEY` (optional, for web search)
 - `BOTPY_APPID` (required, for QQ entry)
 - `BOTPY_SECRET` (required, for QQ entry)
-- `LITTLE_ANGEL_AGENT_WORKSPACE` (optional, workspace path for the agent)
+- `WE_CLAW_HOME` (optional, global WeClaw state root; defaults to `~/.weclaw`)
 
-### Local Secrets File
+### Agent Runtime Secrets File
 
-Create `local_secrets.yaml` in the project root and fill in your keys:
+Create `~/.weclaw/agents/<agent_id>/runtime/secrets.yaml` and fill in your keys. If `WE_CLAW_HOME` is set, replace `~/.weclaw` with that state root:
 
 ```yaml
 LLM_API_KEY: ""
@@ -169,24 +171,18 @@ Note: Get the QQ bot `APPID` and `SECRET` by registering on Tencent QQ Open Plat
 ### Web Console (Recommended)
 
 ```powershell
-python entry_console.py
+python entry_weclaw_console.py
 ```
 
 Or:
 
 ```powershell
-python -m angel_console
+python -m WeClaw_console
 ```
 
 Open `http://127.0.0.1:7788` after startup.
 
 ### CLI
-
-```powershell
-python entry_cli.py
-```
-
-Direct channel path:
 
 ```powershell
 python channels/cli.py
@@ -195,43 +191,32 @@ python channels/cli.py
 ### QQ Direct Message
 
 ```powershell
-python entry_qq.py
-```
-
-Direct channel path:
-
-```powershell
-python channels/qq.py
+python channels/adapters/qq.py
 ```
 
 ### Discord
 
 ```powershell
-python entry_discord.py
-```
-
-Direct channel path:
-
-```powershell
-python channels/discord.py
+python channels/adapters/discord.py
 ```
 
 ## Project Structure
 
-- `entry_qq.py`: QQ direct message entry
-- `entry_cli.py`: CLI entry
-- `little_angel_bot.py`: core bot logic
+- `channels/adapters/qq.py`: QQ direct message entry
+- `channels/cli.py`: CLI entry
+- `core/agent/bot_runtime.py`: core bot logic
+- `integrations/`: MCP, retrieval, browser, metering, and LLM integration layers
 - `tools/`: tool capabilities
-- `skills/`: Skills integration
+- `skills/`: bundled default skill templates copied into workspace-local skills on first use
 
 Additional entrypoint files introduced for the Web Console workflow:
 
-- `entry_console.py`: unified root entry for the browser console
+- `entry_weclaw_console.py`: unified root entry for the browser console
 - `channels/`: direct channel entrypoints for CLI / QQ / Discord
 
 ## Development and Extension
 
-- Add or modify skills in `skills/`
+- Add or modify skills in agent-local `~/.weclaw/agents/<agent_id>/skills/local/`
 - Add new tool capabilities in `tools/`
 - Customize behavior through the unified Skills mechanism
 

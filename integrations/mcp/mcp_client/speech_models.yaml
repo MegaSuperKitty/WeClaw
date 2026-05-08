@@ -1,0 +1,12 @@
+client_id: speech_models
+name: Speech Models
+description: Speech recognition and speech synthesis tools backed by typed model config.
+enabled: false
+mode: local
+transport: stdio
+server_id: speech_models
+enabled_tools: []
+env: {}
+headers: {}
+secret_refs: {}
+metadata: {}

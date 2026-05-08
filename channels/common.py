@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any, Dict
 
 import yaml
+from core.workspace.layout import ensure_workspace_layout_for_source
 
 
 HERE = Path(__file__).resolve().parent
@@ -18,23 +19,15 @@ PROJECT_ROOT = HERE.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-HISTORY_DIR = (PROJECT_ROOT / "chat_history").resolve()
-LOCAL_SECRETS_PATH = (PROJECT_ROOT / "local_secrets.yaml").resolve()
-CHANNEL_CONFIG_PATH = (PROJECT_ROOT / "angel_console" / "data" / "channels.json").resolve()
+WORKSPACE_LAYOUT = ensure_workspace_layout_for_source(str(PROJECT_ROOT))
+HISTORY_DIR = Path(WORKSPACE_LAYOUT.history_root)
+AGENT_ROOT = Path(WORKSPACE_LAYOUT.agent_root)
+AGENT_ID = WORKSPACE_LAYOUT.agent_id
+RUNTIME_SECRETS_PATH = Path(WORKSPACE_LAYOUT.runtime_secrets_path).resolve()
+CHANNEL_CONFIG_PATH = (Path(WORKSPACE_LAYOUT.runtime_console_root) / "channels.json").resolve()
 
 
-def resolve_agent_root() -> Path:
-    env_root = os.getenv("LITTLE_ANGEL_AGENT_WORKSPACE", "").strip()
-    if env_root:
-        return Path(env_root).expanduser().resolve()
-    return (PROJECT_ROOT / "agent_workspace").resolve()
-
-
-AGENT_ROOT = resolve_agent_root()
-AGENT_ROOT.mkdir(parents=True, exist_ok=True)
-
-
-def load_local_secrets(path: Path = LOCAL_SECRETS_PATH) -> Dict[str, Any]:
+def load_runtime_secrets(path: Path = RUNTIME_SECRETS_PATH) -> Dict[str, Any]:
     if not path.is_file():
         return {}
     try:

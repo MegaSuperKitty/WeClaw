@@ -1,0 +1,15 @@
+{
+  "name": "@weclaw/openclaw-echo-channel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "openclaw": {
+    "extensions": ["./index.js"],
+    "setupEntry": "./setup-entry.js",
+    "channel": {
+      "id": "echo",
+      "label": "Echo",
+      "blurb": "Local echo channel for host compatibility smoke tests."
+    }
+  }
+}

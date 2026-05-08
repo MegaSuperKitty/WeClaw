@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-"""Channel entrypoints for LittleAngelBot."""
+"""Channel entrypoints for WeClaw."""

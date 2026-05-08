@@ -1,7 +1,7 @@
-![LittleAngelBot Logo](docs/logo.png)
+![WeClaw Logo](docs/logo.png)
 
 <div align="center">
-  <h1>LittleAngelBot：手机 与 Windows 协同的个人助手</h1>
+  <h1>WeClaw：手机 与 Windows 协同的个人助手</h1>
   <p>
     <img src="https://img.shields.io/badge/python-%E2%89%A53.11-blue" alt="Python">
     <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
@@ -15,17 +15,18 @@
 ## GUI 界面预览
 
 <div align="center">
-  <img src="docs/GUI.png" alt="LittleAngel Agent 控制台界面" width="1100" />
+  <img src="docs/GUI.png" alt="WeClaw Agent 控制台界面" width="1100" />
 </div>
 
 ## 时间线
 
-- **2026-02-03** 🎉 小天使🐣智能体开源啦，欢迎使用!
-- **2026-02-23** 🖥️ 新增图形化 **Agent 控制台**（`angel_console/`），支持统一管理与可视化操作：
+- **2026-02-03** 🎉 WeClaw 智能体开源啦，欢迎使用！
+- **2026-02-23** 🖥️ 新增图形化 **Agent 控制台**（`WeClaw_console/`），支持统一管理与可视化操作：
   - 聊天（SSE 流式 + ReAct 过程追踪）
   - 语音输入（浏览器端录音 + 本地转写）
   - 搜索任务（会话检索与上下文定位）
   - 频道（Web / CLI / QQ / Discord）
+  - Plugin Channel Host（workspace 安装的 TypeScript channel runtime）
   - 定时任务（Cron）与心跳（Heartbeat）
   - Skills 管理
   - 模型配置与切换
@@ -34,8 +35,12 @@
   - 本地与远程 MCP Client 运行时
   - 在 Web Console 中支持 MCP 的发现、配置与运行时管理
 - **2026-03-09** 🚪 围绕 **Web Console** 统一了项目启动入口：
-  - 新增 `entry_console.py` 作为推荐根入口
-  - 新增 `python -m angel_console` 包启动方式
+  - 新增 `entry_weclaw_console.py` 作为推荐根入口
+  - 新增 `python -m WeClaw_console` 包启动方式
+- **2026-05-08** 💬 新增 **自由对话** 能力：
+  - 支持在不创建明确任务的情况下直接与 Agent 连续交流
+  - 通过主会话 / 任务会话机制区分开放式对话与可执行任务
+  - 对话过程中可自然切换到任务执行，并保留上下文衔接
 
 ## 核心亮点
 
@@ -45,6 +50,7 @@
 - 上下文工程：压缩、卸载与文件系统协同，降低上下文溢出风险
 - 安全沙箱与异步执行：提升长链路任务执行稳定性
 - Skills 集成机制：支持能力扩展与个性化配置
+- 自由对话与任务会话并行：日常交流和可执行任务可以自然切换
 - 任务状态管理：支持复杂任务的多轮自动执行
 - 执行策略清晰：先规划、再行动
 
@@ -74,14 +80,14 @@
 
 ## 图形化 Agent 控制台
 
-项目已提供本地图形化控制台 `angel_console/`，用于统一管理 Agent 的核心运行能力。控制台默认仅监听 `127.0.0.1`，适合本机开发和运维场景。
+项目已提供本地图形化控制台 `WeClaw_console/`，用于统一管理 Agent 的核心运行能力。控制台默认仅监听 `127.0.0.1`，适合本机开发和运维场景。
 
 主要功能包括：
 
-- 聊天：会话管理、流式输出、工具调用过程可视化
+- 聊天：自由对话、任务会话管理、流式输出、工具调用过程可视化
 - 语音输入：浏览器端录音后本地转写为文本（支持中英文）
 - 搜索任务：跨会话检索并快速定位相关上下文
-- 频道：统一配置与查看 Web / CLI / QQ / Discord 渠道状态
+- 频道：统一配置与查看 Web / CLI / QQ / Discord / Plugin Channel Host 渠道状态
 - 定时任务与心跳：支持周期任务、即时触发与状态管理
 - Skills：从工作目录发现并展示可用技能
 - 模型：配置多 Provider/Profile，并切换当前工作模型
@@ -92,33 +98,27 @@
 现在推荐把 Web Console 作为项目主入口来启动：
 
 ```powershell
-python entry_console.py
+python entry_weclaw_console.py
 ```
 
 也支持包方式启动：
 
 ```powershell
-python -m angel_console
+python -m WeClaw_console
 ```
 
 启动后在浏览器打开 `http://127.0.0.1:7788`。
 
 推荐使用流程：先进入 Web Console，再在 `Channels` 页面管理 CLI / QQ / Discord。
 
+如果启用 `Plugin Channel Host`，WeClaw 会在首次启动时把 Node 运行时准备到 `~/.weclaw/agents/<agent_id>/runtime/plugin_channel_host/`，不依赖源码目录中提交的 `node_modules/` 或 `dist/`。
+
 直接渠道脚本依然保留，适合高级或单渠道用法：
 
 ```powershell
 python channels/cli.py
-python channels/qq.py
-python channels/discord.py
-```
-
-根目录下的旧入口也仍然可用：
-
-```powershell
-python entry_cli.py
-python entry_qq.py
-python entry_discord.py
+python channels/adapters/qq.py
+python channels/adapters/discord.py
 ```
 
 ## 适用场景
@@ -130,6 +130,8 @@ python entry_discord.py
 
 ## 运行前准备
 
+普通使用场景下，建议在 Web Console 的 `模型` 页面配置 Provider/Profile、API Key 和当前启用模型。环境变量与 `~/.weclaw/agents/<agent_id>/runtime/secrets.yaml` 主要用于首次启动、无界面运行或手动恢复配置。
+
 环境变量：
 
 - `LLM_API_KEY`（必填，用于模型调用）
@@ -140,11 +142,11 @@ python entry_discord.py
 - `ZHIPU_API_KEY`（可选，用于网页搜索）
 - `BOTPY_APPID`（必填，QQ 入口需要）
 - `BOTPY_SECRET`（必填，QQ 入口需要）
-- `LITTLE_ANGEL_AGENT_WORKSPACE`（可选，Agent 工作目录）
+- `WE_CLAW_HOME`（可选，WeClaw 全局状态根目录，默认 `~/.weclaw`）
 
-### 本地密钥文件
+### Agent 运行时密钥文件
 
-请在项目根目录创建 `local_secrets.yaml`，并填写：
+请创建 `~/.weclaw/agents/<agent_id>/runtime/secrets.yaml` 并填写密钥。如果设置了 `WE_CLAW_HOME`，请把 `~/.weclaw` 替换为对应的状态根目录：
 
 ```yaml
 LLM_API_KEY: ""
@@ -163,24 +165,18 @@ BOTPY_SECRET: ""
 ### Web Console（推荐）
 
 ```powershell
-python entry_console.py
+python entry_weclaw_console.py
 ```
 
 或：
 
 ```powershell
-python -m angel_console
+python -m WeClaw_console
 ```
 
 启动后打开 `http://127.0.0.1:7788`。
 
 ### CLI
-
-```powershell
-python entry_cli.py
-```
-
-直接渠道路径：
 
 ```powershell
 python channels/cli.py
@@ -189,43 +185,32 @@ python channels/cli.py
 ### QQ 私聊
 
 ```powershell
-python entry_qq.py
-```
-
-直接渠道路径：
-
-```powershell
-python channels/qq.py
+python channels/adapters/qq.py
 ```
 
 ### Discord
 
 ```powershell
-python entry_discord.py
-```
-
-直接渠道路径：
-
-```powershell
-python channels/discord.py
+python channels/adapters/discord.py
 ```
 
 ## 目录结构
 
-- `entry_qq.py`：QQ 私聊入口
-- `entry_cli.py`：CLI 入口
-- `little_angel_bot.py`：机器人核心逻辑
+- `channels/adapters/qq.py`：QQ 私聊入口
+- `channels/cli.py`：CLI 入口
+- `core/agent/bot_runtime.py`：机器人核心逻辑
+- `integrations/`：MCP、检索、浏览器、计费与 LLM 接入层
 - `tools/`：工具能力
-- `skills/`：Skills 能力集成
+- `skills/`：仓库内置默认 skill 模板，首次使用时会复制到 workspace 私有 skills 目录
 
 为新的 Web Console 启动流补充的入口文件：
 
-- `entry_console.py`：浏览器控制台统一入口
+- `entry_weclaw_console.py`：浏览器控制台统一入口
 - `channels/`：CLI / QQ / Discord 的直接入口目录
 
 ## 开发与扩展
 
-- 在 `skills/` 中新增或修改技能
+- 在 `~/.weclaw/agents/<agent_id>/skills/local/` 中新增或修改技能
 - 在 `tools/` 中新增工具能力
 - 通过统一 Skills 机制做个性化扩展
 
